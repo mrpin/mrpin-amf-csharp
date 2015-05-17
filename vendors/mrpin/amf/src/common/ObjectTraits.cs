@@ -1,20 +1,22 @@
 using System.Collections.Generic;
-
-public class ObjectTraits
+namespace AMF
 {
-    /*
-     * Fields
-     */
-    public string className;
-    public bool isDynamic;
-    public List<string> members;
-
-    /*
-     * Methods
-     */
-    public ObjectTraits()
+    public class ObjectTraits
     {
-        members = new  List<string>();
-        isDynamic = true;
+        /*
+         * Fields
+         */
+        public string className;
+        public bool isDynamic;
+        public List<string> members;
+
+        /*
+         * Methods
+         */
+        public ObjectTraits()
+        {
+            members = new  List<string>();
+            isDynamic = true;
+        }
     }
 }

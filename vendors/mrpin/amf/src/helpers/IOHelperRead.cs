@@ -2,45 +2,49 @@ using System;
 using System.IO;
 using System.Linq;
 
-public static class IOHelperRead
+namespace AMF
 {
-    public static bool isEof(this MemoryStream stream)
+    public static class IOHelperRead
     {
-        return stream.Position == stream.Length;
-    }
-
-    public static int TryReadByte(this MemoryStream stream)
-    {
-        if (stream.isEof())
+        public static bool isEof(this MemoryStream stream)
         {
-            throw new AmfExceptionIncomplete();
+            return stream.Position == stream.Length;
         }
 
-        return stream.ReadByte();
-    }
-
-    public static int TryReadWord(this MemoryStream stream)
-    {
-        if (stream.isEof())
+        public static int TryReadByte(this MemoryStream stream)
         {
-            throw new AmfExceptionIncomplete();
+            if (stream.isEof())
+            {
+                throw new AmfExceptionIncomplete();
+            }
+
+            return stream.ReadByte();
         }
 
-        return stream.ReadByte();
-    }
-
-    public static double TryReadDouble(this MemoryStream stream)
-    {
-        byte bytesToRead = 8;
-
-        if (stream.Position + bytesToRead > stream.Length)
+        public static int TryReadWord(this MemoryStream stream)
         {
-            throw new AmfExceptionIncomplete();
+            if (stream.isEof())
+            {
+                throw new AmfExceptionIncomplete();
+            }
+
+            return stream.ReadByte();
         }
 
-        byte[] buffer = new byte[bytesToRead];
-        stream.Read(buffer, 0, buffer.Length);
+        public static double TryReadDouble(this MemoryStream stream)
+        {
+            byte bytesToRead = 8;
 
-        return BitConverter.ToDouble(buffer.Reverse().ToArray(), 0);
+            if (stream.Position + bytesToRead > stream.Length)
+            {
+                throw new AmfExceptionIncomplete();
+            }
+
+            byte[] buffer = new byte[bytesToRead];
+            stream.Read(buffer, 0, buffer.Length);
+
+            return BitConverter.ToDouble(buffer.Reverse().ToArray(), 0);
+        }
     }
 }
+

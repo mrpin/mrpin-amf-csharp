@@ -1,7 +1,25 @@
+using System;
+
 namespace AMF
 {
     public class AmfConstants
     {
+        public static readonly DateTime UnixEpocTime;
+
+        static AmfConstants()
+        {
+            //Need for avoid errors when ToUniversalTime() will be used.
+            DateTime unixTimestampAt0 = new DateTime(1970, 1, 1, 0, 0, 0);
+            TimeSpan utcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(unixTimestampAt0);
+            unixTimestampAt0 = unixTimestampAt0.Add(utcOffset);
+
+            UnixEpocTime = unixTimestampAt0.ToUniversalTime();
+        }
+
+        /*
+         * Markers
+         */
+
         public const byte AMF3_MARKER_UNDEFINED = 0x00;
         public const byte AMF3_MARKER_NULL = 0x01;
 

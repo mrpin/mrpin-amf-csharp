@@ -1,5 +1,4 @@
 ﻿using AMF;
-using Mono.Xml.Xsl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,8 +13,6 @@ namespace AMF
         /*
          * Static fields
          */
-
-        private DateTime _dateTimeUtcZero = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         /*
          * Fields
@@ -43,7 +40,7 @@ namespace AMF
             _depth = 0;
         }
 
-        public byte[] serialize(object target)
+        public byte[] Serialize(object target)
         {
             //Initialize caches
             if (_depth == 0)
@@ -76,7 +73,7 @@ namespace AMF
 
             if (target != null)
             {
-                methodInfo = target.GetType().GetMethod("encodeAmf", BindingFlags.Public);
+                methodInfo = target.GetType().GetMethod("EncodeAmf", BindingFlags.Public | BindingFlags.Instance);
             }
 
             if (methodInfo != null)
@@ -124,6 +121,10 @@ namespace AMF
             {
                 amf3WriteDictionary(target as Dictionary<string, object>);
             }
+            else if (target is ObjectDynamic)
+            {
+                amf3WriteObject(target, (target as ObjectDynamic).serialize());
+            }
             else if (target is object)
             {
                 amf3WriteObject(target);
@@ -135,13 +136,13 @@ namespace AMF
         }
 
         // Helper for writing arrays inside encodeAmf
-        public void writeArray(ICollection value)
+        public void WriteArray(ICollection value)
         {
             amf3WriteArray(value);
         }
 
         // Helper for writing objects inside encodeAmf
-        public void writeObject(object target, Dictionary<string, object> properties = null, ObjectTraits traits = null)
+        public void WriteObject(object target, SortedDictionary<string, object> properties = null, ObjectTraits traits = null)
         {
             amf3WriteObject(target, properties, traits);
         }
@@ -178,14 +179,14 @@ namespace AMF
             {
                 int targetInteger = (int)value;
 
-                if (AmfConstants.INTEGER_MIN < (int)value && (int)value < AmfConstants.INTEGER_MAX)
+                if (AmfConstants.INTEGER_MIN <= (int)value && (int)value <= AmfConstants.INTEGER_MAX)
                 {
                     _stream.WriteByte((byte)AmfConstants.AMF3_MARKER_INTEGER);
                     _stream.WriteInteger(targetInteger);
                 }
                 else
                 {
-                    _stream.WriteByte((byte)AmfConstants.AMF3_MARKER_INTEGER);
+                    _stream.WriteByte((byte)AmfConstants.AMF3_MARKER_DOUBLE);
                     _stream.WriteDouble(targetInteger);
                 }
             }
@@ -260,10 +261,8 @@ namespace AMF
 
                 value = value.ToUniversalTime();
 
-                TimeSpan diff = value.Subtract(_dateTimeUtcZero);
-
                 _stream.WriteByte((byte)AmfConstants.AMF3_MARKER_NULL);
-                _stream.WriteDouble(diff.TotalMilliseconds);
+                _stream.WriteDouble(value.UnixTimestamp() * 1000);
             }
         }
 
@@ -350,7 +349,7 @@ namespace AMF
             //                WriteString(stm, "");
         }
 
-        private void amf3WriteObject(object value, Dictionary<string, object> properties = null, ObjectTraits traits = null)
+        private void amf3WriteObject(object value, SortedDictionary<string, object> properties = null, ObjectTraits traits = null)
         {
             _stream.WriteByte((byte)AmfConstants.AMF3_MARKER_OBJECT);
 
@@ -370,8 +369,7 @@ namespace AMF
             if (traits == null)
             {
                 traits = new ObjectTraits();
-                //todo:
-                traits.className = _classMapper.getClassNameRemote("");
+                traits.className = _classMapper.getClassNameRemote(value);
 
                 if (string.IsNullOrEmpty(traits.className))
                 {
@@ -422,10 +420,8 @@ namespace AMF
                 properties = _classMapper.objectSerialize(value);
             }
 
-            for (int j = traits.members.Count - 1; j >= 0 ; j--)
+            foreach (string memberName in traits.members)
             {
-                string memberName = traits.members[j];
-
                 amf3Serialize(properties[memberName]);
 
                 properties.Remove(memberName);
@@ -439,9 +435,10 @@ namespace AMF
                     amf3WriteStringInternal(kvPair.Key);
                     amf3Serialize(kvPair.Value);
                 }
+
+                _stream.WriteByte((byte)AmfConstants.AMF3_CLOSE_DYNAMIC_OBJECT);
             }
 
-            _stream.WriteByte((byte)AmfConstants.AMF3_CLOSE_DYNAMIC_OBJECT);
         }
     }
 }

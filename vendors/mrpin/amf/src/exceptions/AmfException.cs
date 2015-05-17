@@ -1,9 +1,11 @@
 ﻿using System;
-
-public class AmfException : Exception
+namespace AMF
 {
-    public AmfException(string message):base(message)
+    public class AmfException : Exception
     {
+        public AmfException(string message):base(message)
+        {
 
+        }
     }
 }

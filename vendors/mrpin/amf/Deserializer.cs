@@ -29,7 +29,7 @@ namespace AMF
             _classMapper = classMapper;
         }
 
-        public AmfResponse deserialize(byte[] data)
+        public AmfResponse Deserialize(byte[] data)
         {
             if (data == null)
             {
@@ -50,7 +50,7 @@ namespace AMF
 
                 try
                 {
-                    result.objects.Add(amf3Deserialize());
+                    result.Objects.Add(amf3Deserialize());
                 }
                 catch (AmfException e)
                 {
@@ -60,7 +60,7 @@ namespace AMF
 
                     int bytesReaded = _source.Read(incompleteObject, sourcePosition, bytesToRead);
 
-                    result.incompleteObject = incompleteObject;
+                    result.IncompleteObject = incompleteObject;
 
                     //todo: review and remove if not needed
                     //                    string data = Encoding.UTF8.GetString(receivedData, 0, bytesReaded);

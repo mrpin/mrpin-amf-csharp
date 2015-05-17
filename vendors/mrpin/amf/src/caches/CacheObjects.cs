@@ -1,4 +1,7 @@
-﻿public class CacheObjects : CacheBase<object>
+﻿namespace AMF
 {
+    public class CacheObjects : CacheBase<object>
+    {
 
+    }
 }

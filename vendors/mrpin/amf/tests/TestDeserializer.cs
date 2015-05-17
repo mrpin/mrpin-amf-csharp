@@ -1,93 +1,97 @@
-using AMF;
 using System;
-using Debug = UnityEngine.Debug;
 
-public class TestDeserializer : TestBase
+namespace AMF
 {
-    /*
-     * Fields
-     */
-
-    /*
-     * Methods
-     */
-
-    public void run()
+    public class TestDeserializer : TestBase
     {
-        Debug.Log("test serializer started");
 
-        //simple
-        runTest(testNull, "should derialize a null");
+        /*
+         * Methods
+         */
 
-        runTest(testFalse, "should derialize a false");
-        runTest(testTrue, "should derialize a true");
+        public TestDeserializer(string pathToFixtures):base(pathToFixtures)
+        {
 
-        runTest(testIntegers, "should deserialize integers");
-        runTest(testLargeIntegers, "should deserialize large integers");
-        runTest(testBigNum, "should deserialize BigNums");
+        }
 
-        runTest(testString, "should deserialize BigNums");
+        public void Run()
+        {
+            AmfLogger.Log("test serializer started");
 
-        //complex
-        runTest(testDate, "should deserialize dates");
+            //simple
+            RunTest(TestNull, "should derialize a null");
 
-        runTest(testDynamicObject, "should deserialize an unmapped object as a dynamic anonymous object");
+            RunTest(TestFalse, "should derialize a false");
+            RunTest(testTrue, "should derialize a true");
 
-        Debug.Log(_testPassed + " tests passed");
-        Debug.Log(_testFailed + " tests failed");
+            RunTest(testIntegers, "should deserialize integers");
+            RunTest(testLargeIntegers, "should deserialize large integers");
+            RunTest(testBigNum, "should deserialize BigNums");
+
+            RunTest(testString, "should deserialize BigNums");
+
+            //complex
+            RunTest(testDate, "should deserialize dates");
+
+            RunTest(testDynamicObject, "should deserialize an unmapped object as a dynamic anonymous object");
+
+            AmfLogger.Log(_testPassed + " tests passed");
+            AmfLogger.Log(_testFailed + " tests failed");
+        }
+
+        private void TestNull()
+        {
+            AssertEqual(null, GetFirstObject("simple/amf3-null.bin"));
+        }
+
+        private void TestFalse()
+        {
+            AssertEqual(false, GetFirstObject("simple/amf3-false.bin"));
+        }
+
+        private void testTrue()
+        {
+            UtilsDebug.assertEqual(true, GetFirstObject("simple/amf3-true.bin"));
+        }
+
+        private void testIntegers()
+        {
+            AssertEqual(AmfConstants.INTEGER_MAX, GetFirstObject("simple/amf3-max.bin"));
+            AssertEqual(0, GetFirstObject("simple/amf3-0.bin"));
+            AssertEqual(AmfConstants.INTEGER_MIN, GetFirstObject("simple/amf3-min.bin"));
+        }
+
+        private void testLargeIntegers()
+        {
+            AssertEqual(Convert.ToDouble(AmfConstants.INTEGER_MAX + 1), GetFirstObject("simple/amf3-large-max.bin"));
+            AssertEqual(Convert.ToDouble(AmfConstants.INTEGER_MIN - 1), GetFirstObject("simple/amf3-large-min.bin"));
+        }
+
+
+        private void testBigNum()
+        {
+            AssertEqual(Math.Pow(2, 1000), GetFirstObject("simple/amf3-bignum.bin"));
+        }
+
+
+        private void testString()
+        {
+            UtilsDebug.assertEqual("String . String", GetFirstObject("simple/amf3-string.bin"));
+        }
+
+        private void testDate()
+        {
+            UtilsDebug.assertEqual(new DateTime(0), GetFirstObject("complex/amf3-date.bin"));
+        }
+
+        private void testDynamicObject()
+        {
+            //todo:finish
+            //        UtilsDebug.assertEqual(new DateTime(0), getFirstObject("complex/amf3-dynamic-object.bin"));
+        }
+
+
+
     }
-
-    private void testNull()
-    {
-        UtilsDebug.assertEqual(null, getFirstObject("simple/amf3-null.bin"));
-    }
-
-    private void testFalse()
-    {
-        UtilsDebug.assertEqual(false, getFirstObject("simple/amf3-false.bin"));
-    }
-
-    private void testTrue()
-    {
-        UtilsDebug.assertEqual(true, getFirstObject("simple/amf3-true.bin"));
-    }
-
-    private void testIntegers()
-    {
-        UtilsDebug.assertEqual(AmfConstants.INTEGER_MAX, getFirstObject("simple/amf3-max.bin"));
-        UtilsDebug.assertEqual(0, getFirstObject("simple/amf3-0.bin"));
-        UtilsDebug.assertEqual(AmfConstants.INTEGER_MIN, getFirstObject("simple/amf3-min.bin"));
-    }
-
-    private void testLargeIntegers()
-    {
-        UtilsDebug.assertEqual((double)AmfConstants.INTEGER_MAX + 1, getFirstObject("simple/amf3-large-max.bin"));
-        UtilsDebug.assertEqual((double)AmfConstants.INTEGER_MIN - 1, getFirstObject("simple/amf3-large-min.bin"));
-    }
-
-
-    private void testBigNum()
-    {
-        UtilsDebug.assertEqual(Math.Pow(2, 1000), getFirstObject("simple/amf3-bignum.bin"));
-    }
-
-
-    private void testString()
-    {
-        UtilsDebug.assertEqual("String . String", getFirstObject("simple/amf3-string.bin"));
-    }
-
-    private void testDate()
-    {
-        UtilsDebug.assertEqual(new DateTime(0), getFirstObject("complex/amf3-date.bin"));
-    }
-
-    private void testDynamicObject()
-    {
-        //todo:finish
-//        UtilsDebug.assertEqual(new DateTime(0), getFirstObject("complex/amf3-dynamic-object.bin"));
-    }
-
-
 
 }

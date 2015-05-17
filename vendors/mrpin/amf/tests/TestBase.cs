@@ -1,82 +1,121 @@
 using System;
 using System.IO;
 using System.Text;
-public class TestBase
+namespace AMF
 {
-    /*
-     * Fields
-     */
-    protected int _testPassed;
-    protected int _testFailed;
-
-    /*
-     * Helpers
-     */
-
-    private string getFullPathFor(string fileName)
+    public class TestBase
     {
-        string result = Directory.GetCurrentDirectory();
+        /*
+         * Fields
+         */
+        protected int _testPassed;
+        protected int _testFailed;
 
-        result = Path.Combine(result, "Assets/fixtures/");
-        result = Path.Combine(result, fileName);
+        private string _pathToFixtures;
 
-        return result;
-    }
+        /*
+         * Methods
+         */
 
-    protected string getDataFromFile(string fileName)
-    {
-        string result = null;
-
-        string path = getFullPathFor(fileName);
-
-        byte[] data = File.ReadAllBytes(path);
-
-        result = Encoding.UTF8.GetString(data);
-
-        return result;
-    }
-
-    protected object getFirstObject(string fileName)
-    {
-        object result = null;
-
-        string path = getFullPathFor(fileName);
-
-        byte[] data = File.ReadAllBytes(path);
-
-        AmfResponse response = AMF.Root.deserialize(data);
-
-        result = response.objects[0];
-
-        return result;
-    }
-
-    protected string getAmfString(object value)
-    {
-        string result = null;
-
-        byte[] data = AMF.Root.serialize(value);
-
-        result = Encoding.UTF8.GetString(data);
-
-        return result;
-    }
-
-    protected void runTest(UtilsDelegate.CallbackWithoutParams test, string message)
-    {
-        try
+        public TestBase(string pathToFixtures = null)
         {
-            test();
-
-            _testPassed++;
+            if(pathToFixtures == null)
+            {
+                _pathToFixtures = Path.Combine(Directory.GetCurrentDirectory(), "fixtures");
+            }
+            else
+            {
+                _pathToFixtures = pathToFixtures;
+            }
         }
-        catch (Exception e)
+
+        /*
+         * Helpers
+         */
+
+        protected string GetStringFromFile(string fileName)
         {
-            UnityEngine.Debug.LogError(message + " failed");
-            UnityEngine.Debug.LogError(e.Message);
-            UnityEngine.Debug.LogError(e.StackTrace);
+            string result = null;
 
-            _testFailed++;
+            string path = Path.Combine(_pathToFixtures, fileName);
+
+            byte[] data = File.ReadAllBytes(path);
+
+            result = Encoding.UTF8.GetString(data);
+
+            return result;
         }
+
+        protected object GetFirstObject(string fileName)
+        {
+            object result = null;
+
+            string path = Path.Combine(_pathToFixtures, fileName);
+
+            byte[] data = File.ReadAllBytes(path);
+
+            AmfResponse response = AMF.Root.Deserialize(data);
+
+            result = response.Objects[0];
+
+            return result;
+        }
+
+        protected string GetAmf3String(object value)
+        {
+            string result = null;
+
+            byte[] data = AMF.Root.Serialize(value);
+
+            result = Encoding.UTF8.GetString(data);
+
+            return result;
+        }
+
+        protected void RunTest(UtilsDelegate.CallbackWithoutParams test, string message)
+        {
+            try
+            {
+                test();
+
+                _testPassed++;
+            }
+            catch (Exception e)
+            {
+                AmfLogger.LogError(message + " failed");
+                AmfLogger.LogError(e.Message);
+                AmfLogger.LogError(e.StackTrace);
+
+                _testFailed++;
+            }
+        }
+
+        /*
+         * Assertion
+         */
+
+        protected static void Assert(bool condition)
+        {
+            if (!condition)
+            {
+                throw new Exception();
+            }
+        }
+
+        protected static T AssertEqual<T>(Object target, T value)
+        {
+            Assert(Object.Equals(target, value));
+
+            return value;
+        }
+
+        protected static T AssertNotEqual<T>(Object target, T value)
+        {
+            Assert(!Object.Equals(target, value));
+
+            return value;
+        }
+
+
     }
 }

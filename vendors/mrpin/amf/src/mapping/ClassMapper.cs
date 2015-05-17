@@ -102,7 +102,7 @@ namespace AMF
         {
             if (value is ObjectDynamic)
             {
-                (value as ObjectDynamic).fillProperties(properties);
+                (value as ObjectDynamic).deserialize(properties);
                 return;
             }
 
@@ -142,19 +142,22 @@ namespace AMF
                 }
                 catch (Exception e)
                 {
-                    UnityEngine.Debug.LogError(e.Message);
+                    AmfLogger.LogError(e.Message);
                 }
 
                 if (!isValueEstablished)
                 {
-                    UnityEngine.Debug.LogError("Can't establish property: " + kvPair.Key + " for class: " + targetType.FullName);
+                    AmfLogger.LogError("Can't establish property: " + kvPair.Key + " for class: " + targetType.FullName);
                 }
             }
         }
 
-        public Dictionary<string, object> objectSerialize(object target)
+        /// <summary>
+        /// Returns dictionary with key - property name, value - property value of target
+        /// </summary>
+        public SortedDictionary<string, object> objectSerialize(object target)
         {
-            Dictionary<string, object> result = new Dictionary<string, object>();
+            SortedDictionary<string, object> result = new SortedDictionary<string, object>();
 
             Type targetType = target.GetType();
 

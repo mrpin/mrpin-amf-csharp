@@ -1,24 +1,26 @@
 ﻿using System.Collections.Generic;
-
-public class ObjectWithType : ObjectDynamic
+namespace AMF
 {
-    /*
-     * Properties
-     */
-
-    public string className
+    public class ObjectWithType : ObjectDynamic
     {
-        get;
-        private set;
-    }
+        /*
+         * Properties
+         */
 
-    /*
-     * Methods
-     */
+        public string className
+        {
+            get;
+            private set;
+        }
 
-    //! Default constructor
-    public ObjectWithType(string className):base()
-    {
-        this.className = className;
+        /*
+         * Methods
+         */
+
+        //! Default constructor
+        public ObjectWithType(string className):base()
+        {
+            this.className = className;
+        }
     }
 }

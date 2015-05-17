@@ -1,22 +1,48 @@
 using System.Collections.Generic;
-public class ObjectDynamic : Dictionary<string, object>
+namespace AMF
 {
-    /*
-     * Fields
-     */
-
-    /*
-     * Methods
-     */
-    public ObjectDynamic()
+    public class ObjectDynamic
     {
-    }
+        /*
+         * Fields
+         */
+        private SortedDictionary<string, object> _data;
 
-    public void fillProperties(Dictionary<string, object> properties)
-    {
-        foreach (KeyValuePair<string, object> kvPair in properties)
+        /*
+         * Properties
+         */
+
+        public object this[string key]
         {
-            this[kvPair.Key] = kvPair.Value;
+            get
+            {
+                return _data[key];
+            }
+            set
+            {
+                _data[key] = value;
+            }
+        }
+
+        /*
+         * Methods
+         */
+        public ObjectDynamic()
+        {
+            _data = new SortedDictionary<string, object>();
+        }
+
+        public SortedDictionary<string, object> serialize()
+        {
+            return  _data;
+        }
+
+        public void deserialize(Dictionary<string, object> data)
+        {
+            foreach (KeyValuePair<string, object> kvPair in data)
+            {
+                this[kvPair.Key] = kvPair.Value;
+            }
         }
     }
 }

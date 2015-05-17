@@ -1,7 +1,10 @@
-﻿public class AmfExceptionIncomplete : AmfException
+﻿namespace AMF
 {
-    public AmfExceptionIncomplete(string message = null):base(message)
+    public class AmfExceptionIncomplete : AmfException
     {
+        public AmfExceptionIncomplete(string message = null):base(message)
+        {
 
+        }
     }
 }

@@ -1,27 +1,30 @@
 using System.Collections.Generic;
-public class AmfResponse
+namespace AMF
 {
-    /*
-     * Properties
-     */
-
-    public List<object> objects
+    public class AmfResponse
     {
-        get;
-        private set;
-    }
+        /*
+         * Properties
+         */
 
-    public byte[] incompleteObject
-    {
-        get;
-        set;
-    }
+        public List<object> Objects
+        {
+            get;
+            private set;
+        }
 
-    /*
-     * Methods
-     */
-    public AmfResponse()
-    {
-        objects = new List<object>();
+        public byte[] IncompleteObject
+        {
+            get;
+            set;
+        }
+
+        /*
+         * Methods
+         */
+        public AmfResponse()
+        {
+            Objects = new List<object>();
+        }
     }
 }

@@ -1,38 +1,41 @@
 ﻿using System.Collections.Generic;
 
-public class MappingSet
+namespace AMF
 {
-   /*
-    * Fields
-    */
-    private MPDictionary<string, string> _mappingsRemote;
-    private MPDictionary<string, string> _mappingsLocal;
-
-
-    /*
-     * Methods
-     */
-
-    public MappingSet()
+    public class MappingSet
     {
-        _mappingsRemote = new MPDictionary<string, string>();
-        _mappingsLocal = new MPDictionary<string, string>();
-    }
+        /*
+         * Fields
+         */
+        private MPDictionary<string, string> _mappingsRemote;
+        private MPDictionary<string, string> _mappingsLocal;
 
-    public void registerClassAlias(string classLocal, string classRemote)
-    {
-        _mappingsRemote[classRemote] = classLocal;
-        _mappingsLocal[classLocal] = classRemote;
-    }
 
-    public string getClassNameLocal(string classNameRemote)
-    {
-        return _mappingsRemote[classNameRemote];
-    }
+        /*
+         * Methods
+         */
 
-    public string getClassNameRemote(string classNameLocal)
-    {
-        return _mappingsLocal[classNameLocal];
-    }
+        public MappingSet()
+        {
+            _mappingsRemote = new MPDictionary<string, string>();
+            _mappingsLocal = new MPDictionary<string, string>();
+        }
 
+        public void registerClassAlias(string classLocal, string classRemote)
+        {
+            _mappingsRemote[classRemote] = classLocal;
+            _mappingsLocal[classLocal] = classRemote;
+        }
+
+        public string getClassNameLocal(string classNameRemote)
+        {
+            return _mappingsRemote[classNameRemote];
+        }
+
+        public string getClassNameRemote(string classNameLocal)
+        {
+            return _mappingsLocal[classNameLocal];
+        }
+
+    }
 }

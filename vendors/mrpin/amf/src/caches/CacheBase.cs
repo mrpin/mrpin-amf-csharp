@@ -1,46 +1,48 @@
 using System.Collections.Generic;
-
-public class CacheBase <TKey>
+namespace AMF
 {
-    /*
-      * Fields
-      */
-
-    private int _cacheIndex;
-    private Dictionary<TKey, int> _cache;
-
-    /*
-     * Properties
-     */
-    public int this[TKey key]
+    public class CacheBase <TKey>
     {
-        get
+        /*
+          * Fields
+          */
+
+        private int _cacheIndex;
+        private Dictionary<TKey, int> _cache;
+
+        /*
+         * Properties
+         */
+        public int this[TKey key]
         {
-            int result;
-
-            if (!_cache.TryGetValue(key, out result))
+            get
             {
-                result = - 1;
+                int result;
+
+                if (!_cache.TryGetValue(key, out result))
+                {
+                    result = - 1;
+                }
+
+                return result;
             }
-
-            return result;
         }
-    }
 
-    /*
-     * Methods
-     */
+        /*
+         * Methods
+         */
 
 
-    public CacheBase()
-    {
-        _cache = new Dictionary<TKey, int>();
-        _cacheIndex = 0;
-    }
+        public CacheBase()
+        {
+            _cache = new Dictionary<TKey, int>();
+            _cacheIndex = 0;
+        }
 
-    public void addToCache(TKey value)
-    {
-        _cache[value] = _cacheIndex;
-        _cacheIndex++;
+        public void addToCache(TKey value)
+        {
+            _cache[value] = _cacheIndex;
+            _cacheIndex++;
+        }
     }
 }

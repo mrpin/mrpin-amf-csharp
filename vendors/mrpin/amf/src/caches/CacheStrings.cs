@@ -1,4 +1,7 @@
-﻿ public class CacheStrings : CacheBase<string>
+﻿namespace AMF
 {
+    public class CacheStrings : CacheBase<string>
+    {
 
+    }
 }
