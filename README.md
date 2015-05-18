@@ -1,8 +1,7 @@
 # mrpin-amf-csharp
 
 #todo list
-- tests;
-- logger;
+- attrubute for proerty aliases;
 - dictionary serialization;
 - vector support;
 - rpc;
