@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-public class MPDictionary<TKey, TValue> : Dictionary<TKey, TValue>
+public class MPDictionarySorted<TKey, TValue> : SortedDictionary<TKey, TValue>
 {
+    /*
+     * Properties
+     */
+
     public new TValue this [TKey key]
     {
         get
@@ -16,5 +20,12 @@ public class MPDictionary<TKey, TValue> : Dictionary<TKey, TValue>
         {
             base[key] = value;
         }
+    }
+
+    /*
+     * Methods
+     */
+    public MPDictionarySorted()
+    {
     }
 }

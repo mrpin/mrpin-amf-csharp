@@ -91,7 +91,7 @@ namespace AMF
 
             _log.Invoke(null, new object[]
             {
-                message.ToString()
+                message == null ? message : message.ToString()
             });
         }
 

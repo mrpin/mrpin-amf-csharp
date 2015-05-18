@@ -21,18 +21,18 @@ namespace AMF
             _mappingsLocal = new MPDictionary<string, string>();
         }
 
-        public void registerClassAlias(string classLocal, string classRemote)
+        public void RegisterClassAlias(string classLocal, string classRemote)
         {
             _mappingsRemote[classRemote] = classLocal;
             _mappingsLocal[classLocal] = classRemote;
         }
 
-        public string getClassNameLocal(string classNameRemote)
+        public string GetClassNameLocal(string classNameRemote)
         {
             return _mappingsRemote[classNameRemote];
         }
 
-        public string getClassNameRemote(string classNameLocal)
+        public string GetClassNameRemote(string classNameLocal)
         {
             return _mappingsLocal[classNameLocal];
         }

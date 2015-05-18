@@ -266,9 +266,9 @@ namespace AMF
 
             double seconds = _source.TryReadDouble() / 1000;
 
-            result = new DateTime();
+            result = AmfConstants.UnixEpocTime;
 
-            result.AddSeconds(seconds);
+            result = result.AddSeconds(seconds);
 
             _cacheObjects.Add(result);
 
@@ -306,7 +306,7 @@ namespace AMF
 
                 for (int i = 0; i < objects.Length - 1; i++)
                 {
-                    resultDictionary.Add(i.ToString(), objects[i]);
+                    resultDictionary[i] = objects[i];
                 }
 
                 result = resultDictionary;
@@ -325,7 +325,7 @@ namespace AMF
         {
             object[] result = new object[count];
 
-            for (int i = 0; i < count - 1; i++)
+            for (int i = 0; i < count; i++)
             {
                 result[i] = amf3Deserialize();
             }
@@ -371,7 +371,7 @@ namespace AMF
                 _cacheTraits.Add(traits);
             }
 
-            result = _classMapper.createObject(traits.className);
+            result = _classMapper.CreateObject(traits.className);
             _cacheObjects.Add(result);
 
             Dictionary<string, object> properties = new Dictionary<string, object>();
@@ -395,7 +395,7 @@ namespace AMF
                 }
             }
 
-            _classMapper.objectDeserialize(result, properties);
+            _classMapper.ObjectDeserialize(result, properties);
 
             return result;
         }

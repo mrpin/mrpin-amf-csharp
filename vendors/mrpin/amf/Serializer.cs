@@ -369,7 +369,7 @@ namespace AMF
             if (traits == null)
             {
                 traits = new ObjectTraits();
-                traits.className = _classMapper.getClassNameRemote(value);
+                traits.className = _classMapper.GetClassNameRemote(value);
 
                 if (string.IsNullOrEmpty(traits.className))
                 {
@@ -417,7 +417,7 @@ namespace AMF
             //Extract properties if not given
             if (properties == null)
             {
-                properties = _classMapper.objectSerialize(value);
+                properties = _classMapper.ObjectSerialize(value);
             }
 
             foreach (string memberName in traits.members)

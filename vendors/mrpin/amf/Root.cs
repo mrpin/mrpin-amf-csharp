@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace AMF
 {
@@ -21,12 +22,12 @@ namespace AMF
     ///
     /// foreach(var item in response.Objects)
     /// {
-    ///     AMF.AmfLogger.Log("received object with type: " + item.GetType().FullName);
+    /// AMF.AmfLogger.Log("received object with type: " + item.GetType().FullName);
     /// }
     ///
     /// if(response.IncomcompleteObject != null)
     /// {
-    ///    AMF.AmfLogger.Log("Also this data contains incomplete object");
+    /// AMF.AmfLogger.Log("Also this data contains incomplete object");
     /// }
     ///
     /// </summary>
@@ -67,6 +68,26 @@ namespace AMF
         {
             Deserializer deserializer = new Deserializer(_classMapper);
             return deserializer.Deserialize(data);
+        }
+
+        /*
+         * Mapper methods
+         */
+
+        public static void RegisterClassAlias(string classLocal, string classRemote)
+        {
+            _classMapper.RegisterClassAlias(classLocal, classRemote);
+        }
+
+        //! classMap - dictionary with key - class name local, value - class name remote
+        public static void RegisterClasses(Dictionary<string, string> classMap)
+        {
+            _classMapper.RegisterClasses(classMap);
+        }
+
+        public static void ClearClassAliases()
+        {
+            _classMapper.Reset();
         }
     }
 }

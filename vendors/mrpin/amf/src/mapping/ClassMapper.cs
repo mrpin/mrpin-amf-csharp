@@ -37,27 +37,32 @@ namespace AMF
 
         }
 
-        public void registerClassAlias(string classLocal, string classRemote)
+        public void RegisterClassAlias(string classLocal, string classRemote)
         {
-            _map.registerClassAlias(classLocal, classRemote);
+            _map.RegisterClassAlias(classLocal, classRemote);
         }
 
         //! classMap - dictionary with key - class name local, value - class name remote
-        public void registerClasses(Dictionary<string, string> classMap)
+        public void RegisterClasses(Dictionary<string, string> classMap)
         {
             foreach (KeyValuePair<string, string> kvPair in classMap)
             {
-                registerClassAlias(kvPair.Key, kvPair.Value);
+                RegisterClassAlias(kvPair.Key, kvPair.Value);
             }
         }
 
-        public string getClassNameLocal(string classNameRemote)
+        public void Reset()
         {
-            return _map.getClassNameLocal(classNameRemote);
+            _map = new MappingSet();
+        }
+
+        public string GetClassNameLocal(string classNameRemote)
+        {
+            return _map.GetClassNameLocal(classNameRemote);
         }
 
         // Returns the other-language class name for the given ruby object.
-        public string getClassNameRemote(object value)
+        public string GetClassNameRemote(object value)
         {
             string className = null;
 
@@ -70,10 +75,10 @@ namespace AMF
                 className = value.GetType().FullName;
             }
 
-            return _map.getClassNameRemote(className);
+            return _map.GetClassNameRemote(className);
         }
 
-        public object createObject(string classNameRemote)
+        public object CreateObject(string classNameRemote)
         {
             object result = null;
 
@@ -83,7 +88,7 @@ namespace AMF
                 return result;
             }
 
-            string classNameLocal = _map.getClassNameLocal(classNameRemote);
+            string classNameLocal = _map.GetClassNameLocal(classNameRemote);
 
             if (string.IsNullOrEmpty(classNameLocal))
             {
@@ -98,7 +103,7 @@ namespace AMF
             return result;
         }
 
-        public void objectDeserialize(object value, Dictionary<string, object> properties)
+        public void ObjectDeserialize(object value, Dictionary<string, object> properties)
         {
             if (value is ObjectDynamic)
             {
@@ -155,7 +160,7 @@ namespace AMF
         /// <summary>
         /// Returns dictionary with key - property name, value - property value of target
         /// </summary>
-        public SortedDictionary<string, object> objectSerialize(object target)
+        public SortedDictionary<string, object> ObjectSerialize(object target)
         {
             SortedDictionary<string, object> result = new SortedDictionary<string, object>();
 
