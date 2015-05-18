@@ -1,7 +1,7 @@
 # mrpin-amf-csharp
 
 #todo list
-- attrubute for proerty aliases;
+- attrubute for property aliases;
 - dictionary serialization;
 - vector support;
 - rpc;
